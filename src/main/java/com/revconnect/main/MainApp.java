@@ -17,6 +17,8 @@ public class MainApp {
     private static final ConnectionService connectionService = new ConnectionService();
     private static final FollowService followService = new FollowService();
     private static final NotificationService notificationService = new NotificationService(); // ✅ NEW
+    private static final BusinessHourService businessHourService =  new BusinessHourService();
+
 
     private static User loggedInUser = null;
 
@@ -425,12 +427,20 @@ public class MainApp {
             System.out.println("5. Privacy Settings");
             System.out.println("6. Back");
 
+            if (loggedInUser.getUserType() == UserType.BUSINESS) {
+                System.out.println("7. View Business Hours");
+                System.out.println("8. Set Business Hours");
+
+            }
+
+
 
             System.out.print("Choose option: ");
 
             int choice = readInt();
 
             switch (choice) {
+
                 case 1 -> {
                     Profile p = new Profile();
                     p.setUserId(loggedInUser.getUserId());
@@ -446,9 +456,9 @@ public class MainApp {
 
                     System.out.print("Website: ");
                     p.setWebsite(sc.nextLine());
+
                     if (loggedInUser.getUserType() == UserType.CREATOR ||
                             loggedInUser.getUserType() == UserType.BUSINESS) {
-
                         System.out.print("Category / Industry: ");
                         p.setCategory(sc.nextLine());
                     }
@@ -457,18 +467,20 @@ public class MainApp {
                         System.out.print("Contact Info: ");
                         p.setContactInfo(sc.nextLine());
                     }
+
                     System.out.print("Profile Visibility (PUBLIC / PRIVATE): ");
                     p.setProfileVisibility(sc.nextLine().toUpperCase());
 
-
-
-                    System.out.println(profileService.createProfile(p)
-                            ? "✅ Profile created"
-                            : "❌ Failed");
+                    System.out.println(
+                            profileService.createProfile(p)
+                                    ? "✅ Profile created"
+                                    : "❌ Failed"
+                    );
                 }
 
                 case 2 -> System.out.println(
-                        profileService.viewProfile(loggedInUser.getUserId()));
+                        profileService.viewProfile(loggedInUser.getUserId())
+                );
 
                 case 3 -> {
                     Profile p = new Profile();
@@ -486,9 +498,11 @@ public class MainApp {
                     System.out.print("New Website: ");
                     p.setWebsite(sc.nextLine());
 
-                    System.out.println(profileService.updateProfile(p)
-                            ? "✅ Profile updated"
-                            : "❌ Failed");
+                    System.out.println(
+                            profileService.updateProfile(p)
+                                    ? "✅ Profile updated"
+                                    : "❌ Failed"
+                    );
                 }
 
                 case 4 -> {   // 🔐 Change Password
@@ -517,11 +531,11 @@ public class MainApp {
                             newPassword
                     );
 
-                    if (changed) {
-                        System.out.println("✅ Password changed successfully");
-                    } else {
-                        System.out.println("❌ Current password is incorrect");
-                    }
+                    System.out.println(
+                            changed
+                                    ? "✅ Password changed successfully"
+                                    : "❌ Current password is incorrect"
+                    );
                 }
 
                 case 5 -> {   // 🔐 Privacy Settings
@@ -538,17 +552,63 @@ public class MainApp {
                             visibility
                     );
 
-                    if (updated) {
-                        System.out.println("✅ Profile visibility updated to " + visibility);
+                    System.out.println(
+                            updated
+                                    ? "✅ Profile visibility updated to " + visibility
+                                    : "❌ Failed to update privacy"
+                    );
+                }
+
+                case 6 -> inProfile = false;
+
+                // ✅ NEW: VIEW BUSINESS HOURS
+                case 7 -> {
+                    if (loggedInUser.getUserType() != UserType.BUSINESS) {
+                        System.out.println("❌ Invalid option");
+                        break;
+                    }
+
+                    String hours =
+                            profileService.viewBusinessHours(
+                                    loggedInUser.getUserId()
+                            );
+
+                    if (hours == null || hours.isBlank()) {
+                        System.out.println("📭 Business hours not set");
                     } else {
-                        System.out.println("❌ Failed to update privacy");
+                        System.out.println("\n🕒 BUSINESS HOURS");
+                        System.out.println(hours);
                     }
                 }
-                case 6 -> inProfile = false;
-                default -> System.out.println("❌ Invalid option. Please choose between 1 and 6.");
+
+                case 8 -> {
+                    if (loggedInUser.getUserType() != UserType.BUSINESS) {
+                        System.out.println("❌ Only business accounts can set business hours");
+                        break;
+                    }
+
+                    System.out.println("Enter business hours (example format):");
+                    System.out.println("MON-FRI: 09:00 - 18:00");
+                    System.out.println("SAT: 10:00 - 14:00");
+                    System.out.println("SUN: Closed");
+                    System.out.print("Business Hours: ");
+
+                    String hours = sc.nextLine();
+
+                    boolean updated = profileService.updateBusinessHours(
+                            loggedInUser.getUserId(),
+                            hours
+                    );
+
+                    System.out.println(updated
+                            ? "✅ Business hours updated successfully"
+                            : "❌ Failed to update business hours");
+                }
 
 
+                default -> System.out.println("❌ Invalid option. Please choose a valid menu option.");
             }
+
         }
     }
 

@@ -7,10 +7,9 @@
     <list default="true" id="5a07fd0c-2f17-4b11-950a-4d40511b8f01" name="Changes" comment="RevConnect Done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/revconnect.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/revconnect.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/NotificationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/NotificationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/ProfileDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/ProfileDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/LikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/LikeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/ProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/ProfileService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +105,7 @@
       <workItem from="1769744672096" duration="9575000" />
       <workItem from="1769850099871" duration="8864000" />
       <workItem from="1769998536785" duration="90000" />
-      <workItem from="1769998866308" duration="3576000" />
+      <workItem from="1769998866308" duration="9678000" />
     </task>
     <task id="LOCAL-00001" summary="RevConnect Done">
       <option name="closed" value="true" />
@@ -124,7 +123,23 @@
       <option name="project" value="LOCAL" />
       <updated>1769959972460</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="RevConnect Done">
+      <option name="closed" value="true" />
+      <created>1770004017691</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1770004017691</updated>
+    </task>
+    <task id="LOCAL-00004" summary="RevConnect Done">
+      <option name="closed" value="true" />
+      <created>1770004208001</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1770004208001</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

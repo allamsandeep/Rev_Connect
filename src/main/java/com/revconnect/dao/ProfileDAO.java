@@ -154,4 +154,46 @@ public class ProfileDAO {
         }
     }
 
+
+    public boolean updateBusinessHours(int userId, String hours) {
+
+        String sql =
+                "UPDATE user_profile SET business_hours = ? WHERE user_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, hours);
+            ps.setInt(2, userId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public String getBusinessHours(int userId) {
+
+        String sql =
+                "SELECT business_hours FROM user_profile WHERE user_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("business_hours");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
