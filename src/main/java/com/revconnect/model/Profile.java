@@ -14,6 +14,8 @@ public class Profile {
     private String category;        // creator / business
     private String contactInfo;     // business
     private String profileVisibility;
+    private String externalLinks;
+
 
     // 🔥 NEW BUSINESS FIELDS
     private String businessAddress;
@@ -118,6 +120,15 @@ public class Profile {
     public void setBusinessHours(String businessHours) {
         this.businessHours = businessHours;
     }
+
+    public String getExternalLinks() {
+        return externalLinks;
+    }
+
+    public void setExternalLinks(String externalLinks) {
+        this.externalLinks = externalLinks;
+    }
+
 
     @Override
     public String toString() {

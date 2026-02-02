@@ -432,6 +432,11 @@ public class MainApp {
                 System.out.println("8. Set Business Hours");
 
             }
+            if (loggedInUser.getUserType() == UserType.BUSINESS ||
+                    loggedInUser.getUserType() == UserType.CREATOR) {
+                System.out.println("9. Set External Links");   // ✅ NEW
+            }
+
 
 
 
@@ -603,6 +608,37 @@ public class MainApp {
                     System.out.println(updated
                             ? "✅ Business hours updated successfully"
                             : "❌ Failed to update business hours");
+                }
+
+                case 9 -> {
+                    if (loggedInUser.getUserType() != UserType.BUSINESS &&
+                            loggedInUser.getUserType() != UserType.CREATOR) {
+                        System.out.println("❌ Only business/creator accounts can set external links");
+                        break;
+                    }
+
+                    System.out.println("Enter external links (type END to finish):");
+                    System.out.println("Example:");
+                    System.out.println("Website: https://example.com");
+                    System.out.println("Instagram: https://instagram.com/brand");
+                    System.out.println("LinkedIn: https://linkedin.com/company/brand");
+                    System.out.println("END");
+
+                    StringBuilder links = new StringBuilder();
+                    String line;
+
+                    while (!(line = sc.nextLine()).equalsIgnoreCase("END")) {
+                        links.append(line).append("\n");
+                    }
+
+                    boolean updated = profileService.updateExternalLinks(
+                            loggedInUser.getUserId(),
+                            links.toString()
+                    );
+
+                    System.out.println(updated
+                            ? "✅ External links updated successfully"
+                            : "❌ Failed to update external links");
                 }
 
 
@@ -959,54 +995,54 @@ public class MainApp {
                                 + " | Username: " + u.getUsername()));
     }
 
-    // ================= VIEW OTHER PROFILE =================
 // ================= VIEW OTHER PROFILE =================
-    private static void viewOtherUserProfile() {
+private static void viewOtherUserProfile() {
 
-        System.out.print("Username: ");
-        String username = sc.nextLine();
+    System.out.print("Username: ");
+    String username = sc.nextLine();
 
-        var users = userService.searchUsers(username);
+    var users = userService.searchUsers(username);
 
-        if (users.isEmpty()) {
-            System.out.println("❌ User not found");
-            return;
-        }
-
-        User targetUser = users.get(0);
-        int targetUserId = targetUser.getUserId();
-
-        // ✅ Always allow viewing own profile
-        if (targetUserId == loggedInUser.getUserId()) {
-            System.out.println(profileService.viewProfile(targetUserId));
-            return;
-        }
-
-        Profile profile = profileService.viewProfile(targetUserId);
-
-        if (profile == null) {
-            System.out.println("❌ Profile not found");
-            return;
-        }
-
-        // 🔐 PRIVACY ENFORCEMENT
-        if ("PRIVATE".equalsIgnoreCase(profile.getProfileVisibility())) {
-
-            boolean connected = connectionService.areConnected(
-                    loggedInUser.getUserId(),
-                    targetUserId
-            );
-
-            if (!connected) {
-                System.out.println("🔒 This profile is private.");
-                System.out.println("Send a connection request to view details.");
-                return;
-            }
-        }
-
-        // ✅ Allowed to view
-        System.out.println(profile);
+    if (users.isEmpty()) {
+        System.out.println("❌ User not found");
+        return;
     }
+
+    User targetUser = users.get(0);
+    int targetUserId = targetUser.getUserId();
+
+    // ✅ View own profile
+    if (targetUserId == loggedInUser.getUserId()) {
+        System.out.println(profileService.viewProfile(targetUserId));
+        return;
+    }
+
+    // ✅ Fetch Profile OBJECT (for privacy check)
+    Profile profile = profileService.getProfileByUserId(targetUserId);
+
+    if (profile == null) {
+        System.out.println("❌ Profile not found");
+        return;
+    }
+
+    // 🔐 PRIVACY CHECK
+    if ("PRIVATE".equalsIgnoreCase(profile.getProfileVisibility())) {
+
+        boolean connected = connectionService.areConnected(
+                loggedInUser.getUserId(),
+                targetUserId
+        );
+
+        if (!connected) {
+            System.out.println("🔒 This profile is private.");
+            System.out.println("Send a connection request to view details.");
+            return;
+        }
+    }
+
+    // ✅ Allowed → SHOW PROFILE STRING
+    System.out.println(profileService.viewProfile(targetUserId));
+}
 
 
 

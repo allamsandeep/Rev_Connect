@@ -77,6 +77,7 @@ public class ProfileDAO {
                 p.setWebsite(rs.getString("WEBSITE"));
                 p.setCategory(rs.getString("CATEGORY"));
                 p.setContactInfo(rs.getString("CONTACT_INFO"));
+                p.setExternalLinks(rs.getString("external_links"));
 
                 // 🔐 default privacy handling
                 p.setProfileVisibility(
@@ -195,5 +196,47 @@ public class ProfileDAO {
         }
         return null;
     }
+    public boolean updateExternalLinks(int profileId, String links) {
+
+        String sql =
+                "UPDATE user_profile SET external_links = ? WHERE profile_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, links);
+            ps.setInt(2, profileId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public int getProfileIdByUserId(int userId) {
+
+        String sql =
+                "SELECT profile_id FROM user_profile WHERE user_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("profile_id");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1; // profile not found
+    }
+
+
 
 }

@@ -13,8 +13,34 @@ public class ProfileService {
         return dao.create(p);
     }
 
-    public Profile viewProfile(int userId) {
-        return dao.findByUserId(userId);
+    public String viewProfile(int userId) {
+
+        Profile p = profileDAO.findByUserId(userId);
+        if (p == null) return "❌ Profile not found";
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n👤 PROFILE DETAILS\n");
+        sb.append("Name      : ").append(p.getFullName()).append("\n");
+        sb.append("Bio       : ").append(p.getBio()).append("\n");
+        sb.append("Location  : ").append(p.getLocation()).append("\n");
+        sb.append("Website   : ").append(p.getWebsite()).append("\n");
+
+        if (p.getCategory() != null) {
+            sb.append("Category  : ").append(p.getCategory()).append("\n");
+        }
+
+        if (p.getContactInfo() != null) {
+            sb.append("Contact   : ").append(p.getContactInfo()).append("\n");
+        }
+
+        // ✅ THIS IS THE FIX
+        if (p.getExternalLinks() != null && !p.getExternalLinks().isBlank()) {
+            sb.append("\n🔗 External Links:\n");
+            sb.append(p.getExternalLinks()).append("\n");
+        }
+
+        return sb.toString();
     }
 
     public boolean updateProfile(Profile p) {
@@ -29,6 +55,16 @@ public class ProfileService {
     public boolean updateBusinessHours(int userId, String hours) {
         return profileDAO.updateBusinessHours(userId, hours);
     }
+    public boolean updateExternalLinks(int userId, String links) {
+        int profileId = profileDAO.getProfileIdByUserId(userId);
+        if (profileId == -1) return false;
+
+        return profileDAO.updateExternalLinks(profileId, links);
+    }
+    public Profile getProfileByUserId(int userId) {
+        return profileDAO.findByUserId(userId);
+    }
+
 
 
 }
