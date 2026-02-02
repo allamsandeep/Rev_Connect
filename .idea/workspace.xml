@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a07fd0c-2f17-4b11-950a-4d40511b8f01" name="Changes" comment="RevConnect Done" />
+    <list default="true" id="5a07fd0c-2f17-4b11-950a-4d40511b8f01" name="Changes" comment="RevConnect Done">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/revconnect.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/revconnect.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/NotificationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/NotificationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/LikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/LikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,24 +27,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "allamsandeep"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;allamsandeep&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/allamsandeep/Rev_Connect.git",
-    "accountId": "eef998ce-c49c-4478-b316-1031af0de79e"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/allamsandeep/Rev_Connect.git&quot;,
+    &quot;accountId&quot;: &quot;eef998ce-c49c-4478-b316-1031af0de79e&quot;
   }
-}]]></component>
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -97,7 +104,9 @@
       <workItem from="1769689134504" duration="96000" />
       <workItem from="1769689245064" duration="14807000" />
       <workItem from="1769744672096" duration="9575000" />
-      <workItem from="1769850099871" duration="6664000" />
+      <workItem from="1769850099871" duration="8864000" />
+      <workItem from="1769998536785" duration="90000" />
+      <workItem from="1769998866308" duration="3576000" />
     </task>
     <task id="LOCAL-00001" summary="RevConnect Done">
       <option name="closed" value="true" />
@@ -107,11 +116,42 @@
       <option name="project" value="LOCAL" />
       <updated>1769959661003</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="RevConnect Done">
+      <option name="closed" value="true" />
+      <created>1769959972458</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1769959972460</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="RevConnect Done" />

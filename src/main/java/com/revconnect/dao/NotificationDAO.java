@@ -122,6 +122,11 @@ public class NotificationDAO {
     }
     public void addNotification(int userId, String message) {
 
+        // ✅ Prevent duplicate notifications
+        if (notificationExists(userId, message)) {
+            return;
+        }
+
         String sql =
                 "INSERT INTO notifications (user_id, message, is_read) " +
                         "VALUES (?, ?, 'N')";
@@ -137,5 +142,27 @@ public class NotificationDAO {
             e.printStackTrace();
         }
     }
+
+
+    public boolean notificationExists(int userId, String message) {
+
+        String sql =
+                "SELECT 1 FROM notifications WHERE user_id = ? AND message = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setString(2, message);
+
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 }

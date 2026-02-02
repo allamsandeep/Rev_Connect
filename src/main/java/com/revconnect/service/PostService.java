@@ -89,21 +89,32 @@ public class PostService {
 
         boolean liked = likeService.toggleLike(postId, userId);
 
-        // Send notification ONLY when liked (not unliked)
-        if (liked) {
-            int postOwnerId = postDAO.getPostOwnerId(postId);
+        int postOwnerId = postDAO.getPostOwnerId(postId);
 
-            // Don't notify yourself
-            if (postOwnerId != userId) {
-                String likerName = userDAO.getUsernameById(userId);
-                String message = "❤️ " + likerName + " liked your post";
-                notificationDAO.addNotification(postOwnerId, message);
-
-            }
+        // ❌ Do not notify yourself
+        if (postOwnerId == userId) {
+            return liked;
         }
 
-        return liked;
+        String userName = userDAO.getUsernameById(userId);
+        String message;
+
+        // ✅ DIFFERENT messages for like & unlike
+        if (liked) {
+            message = "❤️ " + userName + " liked your post";
+        } else {
+            message = "💔 " + userName + " unliked your post";
+        }
+
+        // ✅ Prevent duplicate notification inserts
+        if (!notificationDAO.notificationExists(postOwnerId, message)) {
+            notificationDAO.addNotification(postOwnerId, message);
+        }
+
+        return liked; // true = liked, false = unliked
     }
+
+
     public boolean sharePost(int originalPostId, int userId, String comment) {
 
         Post original = postDAO.findPostById(originalPostId);

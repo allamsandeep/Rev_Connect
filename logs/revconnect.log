@@ -1,21 +1,5 @@
-2026-01-31 14:40:25 WARN  [UserDAO] - Username or Email already exists: user1@gmail.com
-2026-01-31 14:47:06 INFO  [UserDAO] - User inserted: user1
-2026-01-31 14:48:36 WARN  [UserDAO] - Username or Email already exists: user1
-2026-01-31 14:49:02 INFO  [UserDAO] - Login successful for user: user1
-2026-01-31 14:50:17 INFO  [UserDAO] - Password reset for user: user1
-2026-01-31 14:50:35 INFO  [UserDAO] - Login successful for user: user1
-2026-01-31 14:55:41 INFO  [UserDAO] - Password changed for userId: 42
-2026-01-31 16:28:48 INFO  [UserDAO] - Login successful for user: user1
-2026-01-31 16:37:53 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-01-31 16:40:53 INFO  [UserDAO] - User search completed for keyword: user1
-2026-01-31 16:52:11 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-01-31 16:54:34 INFO  [UserDAO] - User search completed for keyword: user
-2026-01-31 16:55:54 INFO  [UserDAO] - Login successful for user: user1
-2026-01-31 16:56:45 INFO  [UserDAO] - Login successful for user: shiva
-2026-01-31 16:56:54 INFO  [UserDAO] - User search completed for keyword: user1
-2026-01-31 16:57:58 INFO  [UserDAO] - User search completed for keyword: user1
-2026-01-31 16:58:22 INFO  [UserDAO] - User search completed for keyword: user1
-2026-01-31 16:58:34 INFO  [UserDAO] - Login successful for user: user1
-2026-01-31 16:59:37 INFO  [UserDAO] - Login successful for user: shiva
-2026-01-31 16:59:50 INFO  [UserDAO] - User search completed for keyword: user1
-2026-01-31 17:00:28 INFO  [UserDAO] - User search completed for keyword: user1
+2026-02-02 07:54:32 INFO  [UserDAO] - Login successful for user: Sandeep
+2026-02-02 08:03:17 INFO  [UserDAO] - Login successful for user: Sandeep
+2026-02-02 08:19:05 INFO  [UserDAO] - Login successful for user: Sandeep
+2026-02-02 08:25:52 INFO  [UserDAO] - Login successful for user: Sandeep
+2026-02-02 08:50:36 INFO  [UserDAO] - Login successful for user: Sandeep

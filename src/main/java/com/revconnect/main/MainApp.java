@@ -682,9 +682,18 @@ public class MainApp {
                     System.out.print("Enter Post ID: ");
                     int postId = readInt();
 
-                    postService.toggleLike(postId, loggedInUser.getUserId());
-                    System.out.println("❤️ Like status updated");
+                    boolean liked = postService.toggleLike(
+                            postId,
+                            loggedInUser.getUserId()
+                    );
+
+                    if (liked) {
+                        System.out.println("❤️ Post liked");
+                    } else {
+                        System.out.println("💔 Post unliked");
+                    }
                 }
+
 
                 // ================= ADD COMMENT =================
                 case 6 -> {

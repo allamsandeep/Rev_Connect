@@ -2,50 +2,47 @@ package com.revconnect.service;
 
 import com.revconnect.dao.LikeDAO;
 import com.revconnect.dao.PostDAO;
+import com.revconnect.dao.UserDAO;
 
 public class LikeService {
 
-    private LikeDAO likeDAO = new LikeDAO();
-    private PostDAO postDAO = new PostDAO();                    // ✅ NEW
-    private NotificationService notificationService =
-            new NotificationService();                          // ✅ NEW
+    private final LikeDAO likeDAO = new LikeDAO();
+    private final PostDAO postDAO = new PostDAO();
+    private final NotificationService notificationService =
+            new NotificationService();
+    private final UserDAO userDAO = new UserDAO();
 
     // ================= TOGGLE LIKE =================
     public boolean toggleLike(int postId, int userId) {
 
-        // 1️⃣ Check if user already liked the post
         boolean alreadyLiked = likeDAO.hasUserLiked(postId, userId);
 
         if (alreadyLiked) {
-            // 2️⃣ If already liked → UNLIKE
-            return likeDAO.unlikePost(postId, userId);
-
+            likeDAO.unlikePost(postId, userId);
+            return false; // 💔 unliked
         } else {
-            // 3️⃣ If not liked → LIKE
             boolean success = likeDAO.likePost(postId, userId);
 
-            // 🔔 SEND NOTIFICATION (ONLY ON LIKE)
             if (success) {
                 int postOwnerId = postDAO.getPostOwnerId(postId);
 
-                // 🚫 Don’t notify if user likes own post
                 if (postOwnerId != userId && postOwnerId != -1) {
+                    String userName = userDAO.getUsernameById(userId);
+
                     notificationService.createNotification(
                             postOwnerId,
-                            "❤️ Someone liked your post"
+                            "❤️ " + userName + " liked your post"
                     );
                 }
             }
-            return success;
+            return true; // ❤️ liked
         }
     }
 
-    // ================= CHECK LIKE STATUS =================
     public boolean hasUserLiked(int postId, int userId) {
         return likeDAO.hasUserLiked(postId, userId);
     }
 
-    // ================= GET LIKE COUNT =================
     public int getLikeCount(int postId) {
         return likeDAO.getLikeCount(postId);
     }
