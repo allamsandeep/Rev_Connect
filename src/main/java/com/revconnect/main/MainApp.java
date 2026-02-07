@@ -1023,12 +1023,14 @@ public class MainApp {
                         System.out.println("\n📊 POST ANALYTICS");
 
                         postService.getPostAnalytics(loggedInUser.getUserId())
-                                .forEach(a -> System.out.println(
-                                        "Post ID: " + a.getPostId() +
-                                                " | Likes: " + a.getLikes() +
-                                                " | Comments: " + a.getComments() +
-                                                " | Shares: " + a.getShares()
-                                ));
+                                .forEach(a -> {
+                                    System.out.println("-------------------------");
+                                    System.out.println("Post ID   : " + a.getPostId());
+                                    System.out.println("Likes     : " + a.getLikes());
+                                    System.out.println("Comments  : " + a.getComments());
+                                    System.out.println("Shares    : " + a.getShares());
+                                });
+                        System.out.println("-------------------------");
                     } else {
                         System.out.println("❌ Invalid option");
                     }

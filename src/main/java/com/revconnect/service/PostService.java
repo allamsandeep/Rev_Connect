@@ -174,6 +174,27 @@ public class PostService {
     public List<PostAnalytics> getPostAnalytics(int userId) {
         return postDAO.getPostAnalytics(userId);
     }
+    public void showPostAnalytics(int postId, int userId) {
+
+        // Optional: allow only owner / business / creator
+        int ownerId = postDAO.getPostOwnerId(postId);
+        if (ownerId != userId) {
+            System.out.println("❌ You can view analytics only for your own posts");
+            return;
+        }
+
+        int likes = postDAO.getLikeCount(postId);
+        int comments = postDAO.getCommentCount(postId);
+        int shares = postDAO.getShareCount(postId);
+
+        System.out.println("\n📊 POST ANALYTICS");
+        System.out.println("-------------------------");
+        System.out.println("Post ID   : " + postId);
+        System.out.println("Likes     : " + likes);
+        System.out.println("Comments  : " + comments);
+        System.out.println("Shares    : " + shares);
+        System.out.println("-------------------------");
+    }
 
 }
 
