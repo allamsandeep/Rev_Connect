@@ -1,9 +1,9 @@
 package com.revconnect.service;
 
 import com.revconnect.dao.CommentDAO;
-import com.revconnect.dao.NotificationDAO;
 import com.revconnect.dao.PostDAO;
 import com.revconnect.dao.UserDAO;
+import com.revconnect.model.Comment;
 
 import java.util.List;
 
@@ -11,10 +11,8 @@ public class CommentService {
 
     private final CommentDAO commentDAO = new CommentDAO();
     private final PostDAO postDAO = new PostDAO();
+    private final UserDAO userDAO = new UserDAO();
     private final NotificationService notificationService = new NotificationService();
-    private UserDAO userDAO = new UserDAO();
-
-    private NotificationDAO notificationDAO = new NotificationDAO();
 
     // ================= ADD COMMENT =================
     public boolean addComment(int postId, int userId, String commentText) {
@@ -30,7 +28,6 @@ public class CommentService {
             return false;
         }
 
-        // ✅ Save comment
         boolean success = commentDAO.addComment(postId, userId, commentText);
 
         // 🔔 Notify post owner
@@ -42,19 +39,18 @@ public class CommentService {
                 String commenterName = userDAO.getUsernameById(userId);
                 String message = "💬 " + commenterName + " commented on your post";
                 notificationService.createNotification(postOwnerId, message);
-
             }
         }
 
         return success;
     }
 
-    // ================= VIEW COMMENTS =================
-    public List<String> viewComments(int postId) {
+    // ================= GET COMMENTS BY POST =================
+    public List<Comment> getCommentsByPost(int postId) {
         return commentDAO.getCommentsByPost(postId);
     }
 
-    // ================= DELETE COMMENT =================
+    // ================= DELETE COMMENT (OWN ONLY) =================
     public boolean deleteComment(int commentId, int userId) {
         return commentDAO.deleteComment(commentId, userId);
     }

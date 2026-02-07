@@ -758,19 +758,41 @@ public class MainApp {
                 // ================= MY POSTS ONLY =================
                 case 4 -> {
                     System.out.println("\n👤 MY POSTS");
+
                     List<Post> posts =
                             postService.viewMyPosts(loggedInUser.getUserId());
 
                     if (posts.isEmpty()) {
                         System.out.println("You haven’t posted anything yet");
+                        break;
                     }
 
-                    posts.forEach(p -> {
+                    for (Post p : posts) {
+
                         System.out.println("\nPost ID : " + p.getPostId());
-                        System.out.println("Post    : " + p.getContent());
+                        System.out.println("Post    : " + p.getContent()); // ✅ works for normal + shared
+
                         System.out.println("Likes   : " + postService.getLikeCount(p.getPostId()));
                         System.out.println("Date    : " + p.getCreatedAt());
-                    });
+
+                        // 💬 COMMENTS
+                        List<Comment> comments =
+                                commentService.getCommentsByPost(p.getPostId());
+
+                        System.out.println("💬 Comments:");
+                        if (comments.isEmpty()) {
+                            System.out.println("  No comments yet");
+                        } else {
+                            for (Comment c : comments) {
+                                System.out.println(
+                                        "  - " + c.getUsername() +
+                                                ": " + c.getCommentText()
+                                );
+                            }
+                        }
+
+                        System.out.println("--------------------------------");
+                    }
                 }
 
                 // ================= LIKE / UNLIKE =================
@@ -811,13 +833,20 @@ public class MainApp {
                     System.out.print("Enter Post ID: ");
                     int postId = readInt();
 
-                    List<String> comments =
-                            commentService.viewComments(postId);
+                    List<Comment> comments =
+                            commentService.getCommentsByPost(postId);
 
                     if (comments.isEmpty()) {
-                        System.out.println("No comments yet");
+                        System.out.println("💬 No comments yet");
                     } else {
-                        comments.forEach(System.out::println);
+                        System.out.println("\n💬 COMMENTS");
+                        for (Comment c : comments) {
+                            System.out.println(
+                                    "• " + c.getUsername() +
+                                            ": " + c.getCommentText() +
+                                            " (" + c.getCommentedAt() + ")"
+                            );
+                        }
                     }
                 }
 
