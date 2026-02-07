@@ -56,10 +56,11 @@ public class PostService {
         return postDAO.findPostsByUser(userId);
     }
 
-    // ================= EDIT POST =================
-    public boolean editPost(int postId, int userId, String newContent) {
-        return postDAO.updatePost(postId, userId, newContent);
+// ================= EDIT POST =================
+    public boolean editPost(Post post) {
+        return postDAO.updatePost(post);
     }
+
 
     // ================= DELETE POST =================
     public boolean deletePost(int postId, int userId) {
@@ -159,6 +160,11 @@ public class PostService {
     public boolean hasUserLiked(int postId, int userId) {
         return likeService.hasUserLiked(postId, userId);
     }
+    // ================= GET POST BY ID =================
+    public Post getPostById(int postId) {
+        return postDAO.findPostById(postId);
+    }
+
 
     // ================= PIN POST (BUSINESS FEATURE) =================
     public boolean pinPost(int postId, int userId) {

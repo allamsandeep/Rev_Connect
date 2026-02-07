@@ -703,6 +703,18 @@ public class MainApp {
 
                         System.out.print("Post Type (NORMAL / PROMOTIONAL): ");
                         post.setPostType(sc.nextLine().toUpperCase());
+
+                        // 🔘 CTA BUTTON (OPTIONAL)
+                        System.out.print("Add CTA? (yes/no): ");
+                        String addCta = sc.nextLine().trim().toLowerCase();
+
+                        if (addCta.equals("yes")) {
+                            System.out.print("CTA Text (e.g., Shop Now): ");
+                            post.setCtaText(sc.nextLine());
+
+                            System.out.print("CTA Link (URL): ");
+                            post.setCtaLink(sc.nextLine());
+                        }
                     } else {
                         post.setPostType("NORMAL");
                     }
@@ -725,16 +737,25 @@ public class MainApp {
 
                     if (posts.isEmpty()) {
                         System.out.println("No posts available");
+                        break;
                     }
 
                     posts.forEach(p -> {
                         System.out.println("\nPost ID : " + p.getPostId());
                         System.out.println("User    : " + p.getUsername());
                         System.out.println("Post    : " + p.getContent());
+
+                        // 🔘 DISPLAY CTA (if present)
+                        if (p.getCtaText() != null && !p.getCtaText().isBlank()
+                                && p.getCtaLink() != null && !p.getCtaLink().isBlank()) {
+                            System.out.println("CTA     : " + p.getCtaText() + " → " + p.getCtaLink());
+                        }
+
                         System.out.println("Likes   : " + postService.getLikeCount(p.getPostId()));
                         System.out.println("Date    : " + p.getCreatedAt());
                     });
                 }
+
 
                 // ================= PERSONALIZED FEED =================
                 case 3 -> {
@@ -744,16 +765,25 @@ public class MainApp {
 
                     if (posts.isEmpty()) {
                         System.out.println("No posts from your connections/following yet");
+                        break;
                     }
 
                     posts.forEach(p -> {
                         System.out.println("\nPost ID : " + p.getPostId());
                         System.out.println("User    : " + p.getUsername());
                         System.out.println("Post    : " + p.getContent());
+
+                        // 🔘 DISPLAY CTA (if present)
+                        if (p.getCtaText() != null && !p.getCtaText().isBlank()
+                                && p.getCtaLink() != null && !p.getCtaLink().isBlank()) {
+                            System.out.println("CTA     : " + p.getCtaText() + " → " + p.getCtaLink());
+                        }
+
                         System.out.println("Likes   : " + postService.getLikeCount(p.getPostId()));
                         System.out.println("Date    : " + p.getCreatedAt());
                     });
                 }
+
 
                 // ================= MY POSTS ONLY =================
                 case 4 -> {
@@ -770,7 +800,13 @@ public class MainApp {
                     for (Post p : posts) {
 
                         System.out.println("\nPost ID : " + p.getPostId());
-                        System.out.println("Post    : " + p.getContent()); // ✅ works for normal + shared
+                        System.out.println("Post    : " + p.getContent());
+
+                        // 🔘 DISPLAY CTA (if present)
+                        if (p.getCtaText() != null && !p.getCtaText().isBlank()
+                                && p.getCtaLink() != null && !p.getCtaLink().isBlank()) {
+                            System.out.println("CTA     : " + p.getCtaText() + " → " + p.getCtaLink());
+                        }
 
                         System.out.println("Likes   : " + postService.getLikeCount(p.getPostId()));
                         System.out.println("Date    : " + p.getCreatedAt());
@@ -794,6 +830,7 @@ public class MainApp {
                         System.out.println("--------------------------------");
                     }
                 }
+
 
                 // ================= LIKE / UNLIKE =================
                 case 5 -> {
@@ -867,19 +904,69 @@ public class MainApp {
                     System.out.print("Enter Post ID: ");
                     int postId = readInt();
 
-                    System.out.print("New content: ");
-                    String content = sc.nextLine();
+                    // 🔍 Fetch existing post
+                    Post existingPost = postService.getPostById(postId);
 
-                    boolean updated =
-                            postService.editPost(postId, loggedInUser.getUserId(), content);
-
-                    if (updated) {
-                        System.out.println("✅ Post updated");
-                    } else {
+                    if (existingPost == null || existingPost.getUserId() != loggedInUser.getUserId()) {
                         System.out.println("❌ You can edit only your own posts");
+                        break;
                     }
-                }
 
+                    // 🆕 Create updated post object
+                    Post updatedPost = new Post();
+                    updatedPost.setPostId(postId);
+                    updatedPost.setUserId(loggedInUser.getUserId());
+
+                    // ✏️ CONTENT
+                    System.out.print("New content (press Enter to keep same): ");
+                    String newContent = sc.nextLine();
+                    updatedPost.setContent(
+                            newContent.isBlank() ? existingPost.getContent() : newContent
+                    );
+
+                    // 🏢 BUSINESS / CREATOR OPTIONS
+                    if (loggedInUser.getUserType() == UserType.BUSINESS ||
+                            loggedInUser.getUserType() == UserType.CREATOR) {
+
+                        System.out.print("Post Type (NORMAL / PROMOTIONAL, Enter to keep same): ");
+                        String type = sc.nextLine().trim().toUpperCase();
+                        updatedPost.setPostType(
+                                type.isBlank() ? existingPost.getPostType() : type
+                        );
+
+                        System.out.print("Update CTA? (yes / no / remove): ");
+                        String choice1 = sc.nextLine().trim().toLowerCase();
+
+                        if (choice1.equals("yes")) {
+                            System.out.print("CTA Text: ");
+                            updatedPost.setCtaText(sc.nextLine());
+
+                            System.out.print("CTA Link: ");
+                            updatedPost.setCtaLink(sc.nextLine());
+
+                        } else if (choice1.equals("remove")) {
+                            updatedPost.setCtaText(null);
+                            updatedPost.setCtaLink(null);
+
+                        } else {
+                            // keep existing CTA
+                            updatedPost.setCtaText(existingPost.getCtaText());
+                            updatedPost.setCtaLink(existingPost.getCtaLink());
+                        }
+
+                    } else {
+                        // 👤 Personal user
+                        updatedPost.setPostType(existingPost.getPostType());
+                        updatedPost.setCtaText(null);
+                        updatedPost.setCtaLink(null);
+                    }
+
+                    boolean updated = postService.editPost(updatedPost);
+
+                    System.out.println(updated
+                            ? "✅ Post updated successfully"
+                            : "❌ Update failed");
+                }
 
                 // ================= DELETE POST =================
                 case 10 -> {

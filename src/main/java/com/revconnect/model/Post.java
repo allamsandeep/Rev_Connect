@@ -26,6 +26,8 @@ public class Post {
     // 🔥 NEW BUSINESS / ADVANCED FIELDS
     private boolean pinned;     // true / false
     private Integer originalPostId;   // null = original post
+    private String ctaText;
+    private String ctaLink;
 
     // ===== Getters & Setters =====
 
@@ -93,6 +95,21 @@ public class Post {
 
     public void setOriginalPostId(Integer originalPostId) {
         this.originalPostId = originalPostId;
+    }
+    public String getCtaText() {
+        return ctaText;
+    }
+
+    public void setCtaText(String ctaText) {
+        this.ctaText = ctaText;
+    }
+
+    public String getCtaLink() {
+        return ctaLink;
+    }
+
+    public void setCtaLink(String ctaLink) {
+        this.ctaLink = ctaLink;
     }
 
     @Override

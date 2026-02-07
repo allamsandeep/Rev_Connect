@@ -14,8 +14,9 @@ public class PostDAO {
 
         String sql =
                 "INSERT INTO posts " +
-                        "(post_id, user_id, content, post_type, pinned, original_post_id, created_at) " +
-                        "VALUES (post_seq.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+                        "(post_id, user_id, content, post_type, pinned, original_post_id, " +
+                        "cta_text, cta_link, created_at) " +
+                        "VALUES (post_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -24,22 +25,25 @@ public class PostDAO {
 
             ps.setInt(1, post.getUserId());
             ps.setString(2, post.getContent());
-            ps.setString(3, post.getPostType());   // NORMAL / PROMOTIONAL
+            ps.setString(3, post.getPostType());
             ps.setString(4, post.isPinned() ? "Y" : "N");
 
-// 🔁 THIS IS THE KEY LINE
+            // 🔁 Shared post support
             if (post.getOriginalPostId() != null) {
-                ps.setInt(5, post.getOriginalPostId()); // shared post
+                ps.setInt(5, post.getOriginalPostId());
             } else {
-                ps.setNull(5, Types.INTEGER);            // original post
+                ps.setNull(5, Types.INTEGER);
             }
 
-            ps.setTimestamp(6,
+            // 🔘 CTA SUPPORT
+            ps.setString(6, post.getCtaText());
+            ps.setString(7, post.getCtaLink());
+
+            ps.setTimestamp(8,
                     post.getCreatedAt() != null
                             ? new Timestamp(post.getCreatedAt().getTime())
                             : new Timestamp(System.currentTimeMillis())
             );
-
 
             return ps.executeUpdate() > 0;
 
@@ -50,13 +54,15 @@ public class PostDAO {
     }
 
 
+
     // ================= VIEW GLOBAL FEED =================
     public List<Post> findAll() {
 
         List<Post> posts = new ArrayList<>();
 
         String sql =
-                "SELECT p.post_id, p.user_id, u.username, p.content, p.created_at " +
+                "SELECT p.post_id, p.user_id, u.username, " +
+                        "       p.content, p.cta_text, p.cta_link, p.created_at " +
                         "FROM posts p " +
                         "JOIN users u ON p.user_id = u.user_id " +
                         "ORDER BY p.created_at DESC";
@@ -71,6 +77,11 @@ public class PostDAO {
                 post.setUserId(rs.getInt("user_id"));
                 post.setUsername(rs.getString("username"));
                 post.setContent(rs.getString("content"));
+
+                // 🔘 CTA FIELDS (KEY FIX)
+                post.setCtaText(rs.getString("cta_text"));
+                post.setCtaLink(rs.getString("cta_link"));
+
                 post.setCreatedAt(rs.getTimestamp("created_at"));
                 posts.add(post);
             }
@@ -81,13 +92,15 @@ public class PostDAO {
         return posts;
     }
 
+
     // ================= PERSONALIZED FEED =================
     public List<Post> findPersonalizedFeed(int myUserId) {
 
         List<Post> posts = new ArrayList<>();
 
         String sql =
-                "SELECT DISTINCT p.post_id, p.user_id, u.username, p.content, p.created_at " +
+                "SELECT DISTINCT p.post_id, p.user_id, u.username, " +
+                        "       p.content, p.cta_text, p.cta_link, p.created_at " +
                         "FROM posts p " +
                         "JOIN users u ON p.user_id = u.user_id " +
                         "LEFT JOIN connections c ON " +
@@ -116,6 +129,11 @@ public class PostDAO {
                 post.setUserId(rs.getInt("user_id"));
                 post.setUsername(rs.getString("username"));
                 post.setContent(rs.getString("content"));
+
+                // 🔘 CTA FIELDS (KEY ADDITION)
+                post.setCtaText(rs.getString("cta_text"));
+                post.setCtaLink(rs.getString("cta_link"));
+
                 post.setCreatedAt(rs.getTimestamp("created_at"));
                 posts.add(post);
             }
@@ -132,7 +150,8 @@ public class PostDAO {
         List<Post> posts = new ArrayList<>();
 
         String sql =
-                "SELECT p.post_id, p.user_id, u.username, p.content, p.created_at " +
+                "SELECT p.post_id, p.user_id, u.username, " +
+                        "       p.content, p.cta_text, p.cta_link, p.created_at " +
                         "FROM posts p " +
                         "JOIN users u ON p.user_id = u.user_id " +
                         "WHERE p.user_id = ? " +
@@ -150,6 +169,11 @@ public class PostDAO {
                 post.setUserId(rs.getInt("user_id"));
                 post.setUsername(rs.getString("username"));
                 post.setContent(rs.getString("content"));
+
+                // 🔘 CTA FIELDS (KEY ADDITION)
+                post.setCtaText(rs.getString("cta_text"));
+                post.setCtaLink(rs.getString("cta_link"));
+
                 post.setCreatedAt(rs.getTimestamp("created_at"));
                 posts.add(post);
             }
@@ -159,6 +183,7 @@ public class PostDAO {
         }
         return posts;
     }
+
 
     // ================= FIND POSTS BY HASHTAG =================
     public List<Post> findPostsByHashtag(String tagName) {
@@ -219,18 +244,22 @@ public class PostDAO {
         return -1;
     }
 
-    // ================= EDIT POST =================
-    public boolean updatePost(int postId, int userId, String newContent) {
+    // ================= EDIT POST (FULL UPDATE) =================
+    public boolean updatePost(Post post) {
 
         String sql =
-                "UPDATE posts SET content=? WHERE post_id=? AND user_id=?";
+                "UPDATE posts SET content=?, post_type=?, cta_text=?, cta_link=? " +
+                        "WHERE post_id=? AND user_id=?";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, newContent);
-            ps.setInt(2, postId);
-            ps.setInt(3, userId);
+            ps.setString(1, post.getContent());
+            ps.setString(2, post.getPostType());
+            ps.setString(3, post.getCtaText());
+            ps.setString(4, post.getCtaLink());
+            ps.setInt(5, post.getPostId());
+            ps.setInt(6, post.getUserId());
 
             return ps.executeUpdate() > 0;
 
@@ -345,15 +374,17 @@ public class PostDAO {
 
         return posts;
     }
+
     public List<Post> findSharedPosts() {
 
         List<Post> posts = new ArrayList<>();
 
         String sql =
-                "SELECT p.post_id, p.user_id, u.username, p.content, p.created_at " +
+                "SELECT p.post_id, p.user_id, u.username, " +
+                        "       p.content, p.cta_text, p.cta_link, p.created_at " +
                         "FROM posts p " +
                         "JOIN users u ON p.user_id = u.user_id " +
-                        "WHERE p.original_post_id IS NOT NULL\n" +
+                        "WHERE p.original_post_id IS NOT NULL " +
                         "ORDER BY p.created_at DESC";
 
         try (Connection con = DBConnection.getConnection();
@@ -366,6 +397,11 @@ public class PostDAO {
                 p.setUserId(rs.getInt("user_id"));
                 p.setUsername(rs.getString("username"));
                 p.setContent(rs.getString("content"));
+
+                // 🔘 CTA FIELDS (FINAL FIX)
+                p.setCtaText(rs.getString("cta_text"));
+                p.setCtaLink(rs.getString("cta_link"));
+
                 p.setCreatedAt(rs.getTimestamp("created_at"));
                 posts.add(p);
             }
@@ -376,6 +412,7 @@ public class PostDAO {
 
         return posts;
     }
+
     // ================= PIN POST =================
     public boolean pinPost(int postId, int userId) {
 
