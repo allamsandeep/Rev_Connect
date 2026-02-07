@@ -841,18 +841,31 @@ public class MainApp {
                     System.out.print("New content: ");
                     String content = sc.nextLine();
 
-                    postService.editPost(postId, loggedInUser.getUserId(), content);
-                    System.out.println("✅ Post updated");
+                    boolean updated =
+                            postService.editPost(postId, loggedInUser.getUserId(), content);
+
+                    if (updated) {
+                        System.out.println("✅ Post updated");
+                    } else {
+                        System.out.println("❌ You can edit only your own posts");
+                    }
                 }
+
 
                 // ================= DELETE POST =================
                 case 10 -> {
                     System.out.print("Enter Post ID: ");
                     int postId = readInt();
 
-                    postService.deletePost(postId, loggedInUser.getUserId());
-                    System.out.println("🗑️ Post deleted");
+                    boolean deleted = postService.deletePost(postId, loggedInUser.getUserId());
+
+                    if (deleted) {
+                        System.out.println("🗑️ Post deleted");
+                    } else {
+                        System.out.println("❌ You can delete only your own posts");
+                    }
                 }
+
 
                 // ================= SEARCH BY HASHTAG =================
                 case 11 -> {
@@ -889,9 +902,24 @@ public class MainApp {
                 // ================= FILTER BY USER TYPE =================
                 case 14 -> {
                     System.out.print("Enter User Type (PERSONAL / CREATOR / BUSINESS): ");
-                    String userType = sc.nextLine().toUpperCase();
+                    String input = sc.nextLine().trim().toUpperCase();
 
-                    List<Post> posts = postService.filterByUserType(userType);
+                    // ✅ Empty input check
+                    if (input.isEmpty()) {
+                        System.out.println("❌ User type cannot be empty");
+                        break;
+                    }
+
+                    // ✅ Allowed values check
+                    if (!input.equals("PERSONAL") &&
+                            !input.equals("CREATOR") &&
+                            !input.equals("BUSINESS")) {
+
+                        System.out.println("❌ Invalid user type. Use PERSONAL / CREATOR / BUSINESS");
+                        break;
+                    }
+
+                    List<Post> posts = postService.filterByUserType(input);
 
                     if (posts.isEmpty()) {
                         System.out.println("No posts found for this user type");
@@ -904,6 +932,7 @@ public class MainApp {
                         });
                     }
                 }
+
                 // ================= FILTER SHARED POSTS =================
                 case 15 -> {
                     List<Post> posts = postService.filterSharedPosts();

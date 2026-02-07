@@ -1,18 +1,12 @@
-2026-02-02 07:54:32 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 08:03:17 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 08:19:05 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 08:25:52 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 08:50:36 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 09:44:41 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 09:45:28 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 10:01:02 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 10:11:25 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 10:15:44 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 10:50:44 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 11:49:49 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 11:55:18 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 12:03:33 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 12:06:31 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 12:10:41 INFO  [UserDAO] - Login successful for user: Sravan
-2026-02-02 12:13:19 INFO  [UserDAO] - Login successful for user: Sandeep
-2026-02-02 12:13:29 INFO  [UserDAO] - User search completed for keyword: Sravan
+2026-02-07 21:45:19 INFO  [UserDAO] - User search completed for keyword: test
+2026-02-07 21:45:20 INFO  [UserDAO] - User inserted: login_user_1770480920017
+2026-02-07 21:45:20 INFO  [UserDAO] - Login successful for user: login_user_1770480920017
+2026-02-07 21:45:20 INFO  [UserDAO] - User inserted: test_user_1770480920459
+2026-02-07 21:45:20 INFO  [UserDAO] - User inserted: reset_user_1770480920560
+2026-02-07 21:45:20 INFO  [UserDAO] - Password reset for user: reset_user_1770480920560
+2026-02-07 22:39:48 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-07 22:53:01 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-07 22:54:30 INFO  [UserDAO] - User search completed for keyword: shop
+2026-02-07 23:19:12 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-07 23:29:41 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-07 23:31:53 INFO  [UserDAO] - Login successful for user: sandeep

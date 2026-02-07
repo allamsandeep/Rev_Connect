@@ -240,6 +240,8 @@ public class PostDAO {
         }
     }
 
+
+
     // ================= DELETE POST =================
     public boolean deletePost(int postId, int userId) {
 
@@ -351,7 +353,7 @@ public class PostDAO {
                 "SELECT p.post_id, p.user_id, u.username, p.content, p.created_at " +
                         "FROM posts p " +
                         "JOIN users u ON p.user_id = u.user_id " +
-                        "WHERE p.content LIKE '🔁%' " +
+                        "WHERE p.original_post_id IS NOT NULL\n" +
                         "ORDER BY p.created_at DESC";
 
         try (Connection con = DBConnection.getConnection();
