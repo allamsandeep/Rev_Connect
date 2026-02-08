@@ -343,7 +343,6 @@ public class MainApp {
             int choice = readInt();
 
             switch (choice) {
-
                 case 1 -> {
                     System.out.print("Enter User ID to connect: ");
                     int targetUserId = readInt();
@@ -353,31 +352,48 @@ public class MainApp {
                             targetUserId
                     );
 
+                    // ✅ Print ONLY on success
                     if (sent) {
                         System.out.println("📨 Connection request sent");
+                    }
+                    // ❌ DO NOTHING on failure
+                    // (Service already prints the exact reason)
+                }
+
+                case 2 -> {
+                    var requests = connectionService.viewPendingRequests(
+                            loggedInUser.getUserId()
+                    );
+
+                    if (requests.isEmpty()) {
+                        System.out.println("📭 No pending connection requests");
                     } else {
-                        System.out.println("⚠ Connection already exists or request already sent");
+                        requests.forEach(System.out::println);
                     }
                 }
+  case 3 -> {
+                    System.out.print("Enter Connection ID to accept: ");
+                    int id = readInt();
 
-                case 2 -> connectionService.viewPendingRequests(
-                        loggedInUser.getUserId()).forEach(System.out::println);
-
-                case 3 -> {
-                    System.out.print("Enter Connection ID: ");
-                    System.out.println(
-                            connectionService.acceptRequest(readInt())
-                                    ? "✅ Accepted"
-                                    : "❌ Failed");
+                    if (connectionService.acceptRequest(id)) {
+                        System.out.println("✅ Connection request accepted");
+                    } else {
+                        System.out.println("❌ Invalid or already processed request");
+                    }
                 }
-
                 case 4 -> {
-                    System.out.print("Enter Connection ID: ");
+                    System.out.print("Enter Request ID to reject: ");
+                    int requestId = readInt();
+
+                    boolean rejected = connectionService.rejectRequest(requestId);
+
                     System.out.println(
-                            connectionService.rejectRequest(readInt())
-                                    ? "❌ Rejected"
-                                    : "❌ Failed");
+                            rejected
+                                    ? "❌ Connection request rejected"
+                                    : "❌ Invalid request ID"
+                    );
                 }
+
 
                 case 5 -> {   // 👥 VIEW CONNECTIONS (FIXED)
                     System.out.println("\n=== MY CONNECTIONS ===");

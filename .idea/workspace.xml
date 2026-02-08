@@ -7,10 +7,10 @@
     <list default="true" id="5a07fd0c-2f17-4b11-950a-4d40511b8f01" name="Changes" comment="RevConnect Done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/revconnect.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/revconnect.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/PostDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/PostDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/ConnectionDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/ConnectionDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/dao/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/main/MainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revconnect/service/ConnectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revconnect/service/ConnectionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +112,7 @@
       <workItem from="1770395854901" duration="3277000" />
       <workItem from="1770479466704" duration="106000" />
       <workItem from="1770479593226" duration="15832000" />
+      <workItem from="1770522833845" duration="6143000" />
     </task>
     <task id="LOCAL-00001" summary="RevConnect Done">
       <option name="closed" value="true" />

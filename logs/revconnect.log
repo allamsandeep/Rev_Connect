@@ -10,3 +10,32 @@
 2026-02-08 01:28:14 INFO  [UserDAO] - Login successful for user: techshop
 2026-02-08 02:00:51 INFO  [UserDAO] - Login successful for user: sandeep
 2026-02-08 02:02:48 INFO  [UserDAO] - Login successful for user: techshop
+2026-02-08 09:28:44 INFO  [UserDAO] - User inserted: uday
+2026-02-08 09:28:59 INFO  [UserDAO] - Login successful for user: uday
+2026-02-08 09:35:35 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 09:35:55 INFO  [UserDAO] - User search completed for keyword: uday
+2026-02-08 09:37:50 INFO  [UserDAO] - User search completed for keyword: uday
+2026-02-08 10:57:23 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 10:57:50 INFO  [UserDAO] - User search completed for keyword: tech
+2026-02-08 11:00:51 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:05:33 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:06:41 INFO  [UserDAO] - User search completed for keyword: uday
+2026-02-08 11:09:25 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:09:34 INFO  [UserDAO] - User search completed for keyword: tech
+2026-02-08 11:13:06 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:15:21 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:15:54 INFO  [UserDAO] - User search completed for keyword: tech
+2026-02-08 11:16:08 INFO  [UserDAO] - User search completed for keyword: uday
+2026-02-08 11:26:15 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:29:39 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:30:28 INFO  [UserDAO] - Login successful for user: uday
+2026-02-08 11:33:59 INFO  [UserDAO] - Login successful for user: uday
+2026-02-08 11:34:43 INFO  [UserDAO] - Login successful for user: techshop
+2026-02-08 11:36:32 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:45:44 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:48:01 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:49:16 INFO  [UserDAO] - Login successful for user: techshop
+2026-02-08 11:58:39 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 11:59:16 INFO  [UserDAO] - User search completed for keyword: uday
+2026-02-08 11:59:30 INFO  [UserDAO] - User search completed for keyword: tech
+2026-02-08 11:59:44 INFO  [UserDAO] - Login successful for user: techshop

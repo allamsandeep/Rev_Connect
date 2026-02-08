@@ -13,11 +13,6 @@ public class ConnectionDAO {
     // ================= SEND CONNECTION REQUEST =================
     public boolean sendRequest(int senderId, int receiverId) {
 
-        // 🚫 PREVENT duplicate or reverse connections
-        if (connectionExists(senderId, receiverId)) {
-            return false;
-        }
-
         String sql =
                 "INSERT INTO connections (connection_id, sender_id, receiver_id, status) " +
                         "VALUES (connection_seq.NEXTVAL, ?, ?, 'PENDING')";
@@ -25,18 +20,21 @@ public class ConnectionDAO {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            if (con == null) return false;
-
             ps.setInt(1, senderId);
             ps.setInt(2, receiverId);
 
             return ps.executeUpdate() > 0;
 
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            // ✅ duplicate or reverse request (UQ_SENDER_RECEIVER)
+            return false;
+
         } catch (Exception e) {
-            e.printStackTrace(); // should NOT happen now
+            e.printStackTrace(); // real DB errors only
+            return false;
         }
-        return false;
     }
+
 
     // ================= ACCEPT OR REJECT REQUEST =================
     public boolean updateRequestStatus(int connectionId, String status) {
@@ -154,9 +152,10 @@ public class ConnectionDAO {
     public boolean connectionExists(int userId1, int userId2) {
 
         String sql =
-                "SELECT 1 FROM connections WHERE " +
-                        "(sender_id = ? AND receiver_id = ?) OR " +
-                        "(sender_id = ? AND receiver_id = ?)";
+                "SELECT 1 FROM connections " +
+                        "WHERE status IN ('PENDING', 'ACCEPTED') " +
+                        "AND ((sender_id = ? AND receiver_id = ?) " +
+                        " OR  (sender_id = ? AND receiver_id = ?))";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -173,6 +172,7 @@ public class ConnectionDAO {
         }
         return false;
     }
+
     public List<String> viewConnections(int userId) {
 
         List<String> connections = new ArrayList<>();

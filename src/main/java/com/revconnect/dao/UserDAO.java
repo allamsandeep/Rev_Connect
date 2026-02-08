@@ -215,4 +215,22 @@ public class UserDAO {
 
         return false;
     }
+    public boolean userExists(int userId) {
+
+        String sql = "SELECT 1 FROM users WHERE user_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next(); // ✅ true if user exists
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

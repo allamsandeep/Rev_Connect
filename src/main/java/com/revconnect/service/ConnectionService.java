@@ -1,28 +1,47 @@
 package com.revconnect.service;
 
 import com.revconnect.dao.ConnectionDAO;
+import com.revconnect.dao.UserDAO;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import java.util.List;
 
 public class ConnectionService {
 
     private ConnectionDAO connectionDAO = new ConnectionDAO();
+    private final UserDAO userDAO = new UserDAO();   // ✅ ADD THIS
 
     // ================= SEND CONNECTION REQUEST =================
     public boolean sendConnectionRequest(int senderId, int receiverId) {
 
-        // ❌ cannot send request to self
         if (senderId == receiverId) {
+            System.out.println("❌ You cannot send a connection request to yourself");
             return false;
         }
 
-        // ❌ prevent duplicate requests
-        if (isAlreadyConnectedOrPending(senderId, receiverId)) {
+        if (!userDAO.userExists(receiverId)) {
+            System.out.println("❌ User does not exist");
             return false;
         }
 
-        return connectionDAO.sendRequest(senderId, receiverId);
+        // ✅ THIS IS THE KEY FIX
+        if (connectionDAO.connectionExists(senderId, receiverId)) {
+            System.out.println("⚠ Connection already exists or request already sent");
+            return false;
+        }
+
+        boolean sent = connectionDAO.sendRequest(senderId, receiverId);
+
+        if (sent) {
+            System.out.println("📨 Connection request sent");
+        } else {
+            System.out.println("⚠ Connection already exists or request already sent");
+        }
+
+        return sent;
+
     }
+
 
     // ================= ACCEPT REQUEST =================
     public boolean acceptRequest(int connectionId) {
@@ -44,15 +63,7 @@ public class ConnectionService {
         return connectionDAO.getMyConnectionUserIds(userId);
     }
 
-    // ================= CHECK DUPLICATE CONNECTION =================
-    // (basic version – safe enough for console app)
-    private boolean isAlreadyConnectedOrPending(int senderId, int receiverId) {
 
-        List<Integer> connectedUsers =
-                connectionDAO.getMyConnectionUserIds(senderId);
-
-        return connectedUsers.contains(receiverId);
-    }
     public boolean removeConnection(int userId, int otherUserId) {
         return connectionDAO.removeConnection(userId, otherUserId);
     }
