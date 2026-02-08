@@ -230,5 +230,44 @@ public class ConnectionDAO {
             return false;
         }
     }
+    public boolean rejectedRequestExists(int senderId, int receiverId) {
+
+        String sql =
+                "SELECT 1 FROM connections " +
+                        "WHERE status = 'REJECTED' " +
+                        "AND sender_id = ? AND receiver_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, senderId);
+            ps.setInt(2, receiverId);
+
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public void deleteRejectedRequest(int senderId, int receiverId) {
+
+        String sql =
+                "DELETE FROM connections " +
+                        "WHERE status = 'REJECTED' " +
+                        "AND sender_id = ? AND receiver_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, senderId);
+            ps.setInt(2, receiverId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

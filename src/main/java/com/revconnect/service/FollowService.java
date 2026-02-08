@@ -51,4 +51,14 @@ public class FollowService {
     public List<User> viewFollowing(int userId) {
         return followDAO.getFollowing(userId);
     }
+
+    public int getFollowerCount(int userId) {
+        return followDAO.getFollowerCount(userId);
+    }
+
+    public int getFollowingCount(int userId) {
+        return followDAO.getFollowingCount(userId);
+    }
+
+
 }

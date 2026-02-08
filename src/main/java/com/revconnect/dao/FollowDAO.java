@@ -137,4 +137,42 @@ public class FollowDAO {
 
         return following;
     }
+    // ================= FOLLOWER COUNT =================
+    public int getFollowerCount(int userId) {
+
+        String sql = "SELECT COUNT(*) FROM follows WHERE followed_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) return rs.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // ================= FOLLOWING COUNT =================
+    public int getFollowingCount(int userId) {
+
+        String sql = "SELECT COUNT(*) FROM follows WHERE follower_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) return rs.getInt(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

@@ -352,10 +352,10 @@ public class MainApp {
                             targetUserId
                     );
 
-                    // ✅ Print ONLY on success
-                    if (sent) {
-                        System.out.println("📨 Connection request sent");
-                    }
+//                    // ✅ Print ONLY on success
+//                    if (sent) {
+//                        System.out.println("📨 Connection request sent");
+//                    }
                     // ❌ DO NOTHING on failure
                     // (Service already prints the exact reason)
                 }
@@ -1203,13 +1203,20 @@ private static void viewOtherUserProfile() {
         }
     }
 
-    // ✅ Allowed → SHOW PROFILE STRING
+    // ✅ Allowed → SHOW PROFILE
     System.out.println(profileService.viewProfile(targetUserId));
+
+// 👥 FOLLOW STATS
+    int followers = followService.getFollowerCount(targetUserId);
+    int following = followService.getFollowingCount(targetUserId);
+
+    System.out.println("\n👥 SOCIAL");
+    System.out.println("Followers : " + followers);
+    System.out.println("Following : " + following);
+
 }
 
-
-
-    // ================= SAFE INT =================
+ // ================= SAFE INT =================
     private static int readInt() {
         while (!sc.hasNextInt()) sc.nextLine();
         int val = sc.nextInt();

@@ -24,22 +24,25 @@ public class ConnectionService {
             return false;
         }
 
-        // ✅ THIS IS THE KEY FIX
+        // ❌ Pending or Accepted → block
         if (connectionDAO.connectionExists(senderId, receiverId)) {
             System.out.println("⚠ Connection already exists or request already sent");
             return false;
+        }
+
+        // ✅ Rejected earlier → allow resend
+        if (connectionDAO.rejectedRequestExists(senderId, receiverId)) {
+            connectionDAO.deleteRejectedRequest(senderId, receiverId);
+            System.out.println("🔁 Previous request was rejected. Sending again...");
         }
 
         boolean sent = connectionDAO.sendRequest(senderId, receiverId);
 
         if (sent) {
             System.out.println("📨 Connection request sent");
-        } else {
-            System.out.println("⚠ Connection already exists or request already sent");
         }
 
         return sent;
-
     }
 
 
