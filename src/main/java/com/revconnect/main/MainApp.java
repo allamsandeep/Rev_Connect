@@ -308,15 +308,29 @@ public class MainApp {
                                     ? "🚫 Unfollowed"
                                     : "❌ Failed");
                 }
-                case 3 -> followService.viewFollowers(loggedInUser.getUserId())
-                        .forEach(u ->
-                                System.out.println("User ID: " + u.getUserId()
-                                        + " | Username: " + u.getUsername()));
+                case 3 -> {
+                    var followers = followService.viewFollowers(loggedInUser.getUserId());
 
-                case 4 -> followService.viewFollowing(loggedInUser.getUserId())
-                        .forEach(u ->
+                    if (followers.isEmpty()) {
+                        System.out.println("📭 You don’t have any followers yet");
+                    } else {
+                        followers.forEach(u ->
                                 System.out.println("User ID: " + u.getUserId()
                                         + " | Username: " + u.getUsername()));
+                    }
+                }
+
+                case 4 -> {
+                    var following = followService.viewFollowing(loggedInUser.getUserId());
+
+                    if (following.isEmpty()) {
+                        System.out.println("📭 You are not following anyone yet");
+                    } else {
+                        following.forEach(u ->
+                                System.out.println("User ID: " + u.getUserId()
+                                        + " | Username: " + u.getUsername()));
+                    }
+                }
 
                 case 5 -> inFollow = false;
             }
@@ -499,9 +513,26 @@ public class MainApp {
                     );
                 }
 
-                case 2 -> System.out.println(
-                        profileService.viewProfile(loggedInUser.getUserId())
-                );
+                case 2 -> {
+                    System.out.println(
+                            profileService.viewProfile(loggedInUser.getUserId())
+                    );
+
+                    int followers = followService
+                            .viewFollowers(loggedInUser.getUserId())
+                            .size();
+
+                    int following = followService
+                            .viewFollowing(loggedInUser.getUserId())
+                            .size();
+
+                    System.out.println("\n👥 SOCIAL");
+                    System.out.println("Followers : " + followers);
+                    System.out.println("Following : " + following);
+                    System.out.println("----------------------\n");
+
+                }
+
 
                 case 3 -> {
                     Profile p = new Profile();

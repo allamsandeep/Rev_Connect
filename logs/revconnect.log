@@ -68,3 +68,20 @@
 2026-02-08 16:17:51 INFO  [UserDAO] - Login successful for user: techshop
 2026-02-08 16:18:21 INFO  [UserDAO] - Login successful for user: sandeep
 2026-02-08 16:18:29 INFO  [UserDAO] - User search completed for keyword: techshop
+2026-02-08 16:28:10 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:31:04 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:36:24 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:37:21 INFO  [UserDAO] - Login successful for user: techshop
+2026-02-08 16:37:37 INFO  [UserDAO] - User search completed for keyword: san
+2026-02-08 16:37:47 INFO  [UserDAO] - User search completed for keyword: sandeep
+2026-02-08 16:38:09 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:41:39 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:44:58 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:46:09 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:47:47 INFO  [UserDAO] - Login successful for user: sandeep
+2026-02-08 16:55:19 INFO  [UserDAO] - User search completed for keyword: test
+2026-02-08 16:55:19 INFO  [UserDAO] - User inserted: login_user_1770549919620
+2026-02-08 16:55:19 INFO  [UserDAO] - Login successful for user: login_user_1770549919620
+2026-02-08 16:55:19 INFO  [UserDAO] - User inserted: test_user_1770549919793
+2026-02-08 16:55:19 INFO  [UserDAO] - User inserted: reset_user_1770549919882
+2026-02-08 16:55:20 INFO  [UserDAO] - Password reset for user: reset_user_1770549919882
