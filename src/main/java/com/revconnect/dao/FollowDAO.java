@@ -3,10 +3,7 @@ package com.revconnect.dao;
 import com.revconnect.model.User;
 import com.revconnect.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class FollowDAO {
             return ps.executeUpdate() > 0;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // already following
+            // duplicate follow
             return false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,8 +64,7 @@ public class FollowDAO {
             ps.setInt(1, followerId);
             ps.setInt(2, followedId);
 
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
+            return ps.executeQuery().next();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +81,8 @@ public class FollowDAO {
                 "SELECT u.user_id, u.username " +
                         "FROM follows f " +
                         "JOIN users u ON f.follower_id = u.user_id " +
-                        "WHERE f.followed_id = ?";
+                        "WHERE f.followed_id = ? " +
+                        "ORDER BY u.username";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -116,7 +113,8 @@ public class FollowDAO {
                 "SELECT u.user_id, u.username " +
                         "FROM follows f " +
                         "JOIN users u ON f.followed_id = u.user_id " +
-                        "WHERE f.follower_id = ?";
+                        "WHERE f.follower_id = ? " +
+                        "ORDER BY u.username";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -137,6 +135,7 @@ public class FollowDAO {
 
         return following;
     }
+
     // ================= FOLLOWER COUNT =================
     public int getFollowerCount(int userId) {
 
@@ -174,5 +173,4 @@ public class FollowDAO {
         }
         return 0;
     }
-
 }

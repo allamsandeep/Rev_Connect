@@ -290,24 +290,37 @@ public class MainApp {
                 case 1 -> {
                     System.out.print("Search username: ");
                     List<User> users = userService.searchUsers(sc.nextLine());
+
                     users.forEach(u ->
                             System.out.println("User ID: " + u.getUserId()
                                     + " | Username: " + u.getUsername()));
+
                     System.out.print("Enter User ID to follow: ");
-                    System.out.println(
-                            followService.followUser(loggedInUser.getUserId(), readInt())
-                                    ? "✅ Now following user"
-                                    : "❌ Failed");
+                    followService.followUser(
+                            loggedInUser.getUserId(),
+                            readInt()
+                    );
                 }
+
                 case 2 -> {
-                    followService.viewFollowing(loggedInUser.getUserId())
-                            .forEach(u -> System.out.println(u.getUsername()));
+                    var following = followService.viewFollowing(loggedInUser.getUserId());
+
+                    if (following.isEmpty()) {
+                        System.out.println("📭 You are not following anyone yet");
+                        break;
+                    }
+
+                    following.forEach(u ->
+                            System.out.println("User ID: " + u.getUserId()
+                                    + " | Username: " + u.getUsername()));
+
                     System.out.print("Enter User ID to unfollow: ");
-                    System.out.println(
-                            followService.unfollowUser(loggedInUser.getUserId(), readInt())
-                                    ? "🚫 Unfollowed"
-                                    : "❌ Failed");
+                    followService.unfollowUser(
+                            loggedInUser.getUserId(),
+                            readInt()
+                    );
                 }
+
                 case 3 -> {
                     var followers = followService.viewFollowers(loggedInUser.getUserId());
 

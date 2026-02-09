@@ -15,32 +15,66 @@ public class FollowService {
     // ================= FOLLOW USER =================
     public boolean followUser(int followerId, int followedId) {
 
-        // 🚫 cannot follow yourself
+        // 🚫 Cannot follow yourself
         if (followerId == followedId) {
+            System.out.println("❌ You cannot follow yourself");
             return false;
         }
 
-        // 🚫 already following
+        // 🚫 User does not exist
+        if (!userDAO.userExists(followedId)) {
+            System.out.println("❌ User does not exist");
+            return false;
+        }
+
+        // 🚫 Already following
         if (followDAO.isFollowing(followerId, followedId)) {
+            System.out.println("⚠ You are already following this user");
             return false;
         }
 
+        // ✅ Follow
         boolean success = followDAO.followUser(followerId, followedId);
 
-        // 🔔 CREATE NOTIFICATION
         if (success) {
             String followerName = userDAO.getUsernameById(followerId);
             String message = "👤 " + followerName + " started following you";
             notificationService.createNotification(followedId, message);
+
+            System.out.println("✅ Now following user");
+            return true;
+        }
+
+        System.out.println("❌ Failed to follow user");
+        return false;
+    }
+
+    // ================= UNFOLLOW USER =================
+    public boolean unfollowUser(int followerId, int followedId) {
+
+        // 🚫 Cannot unfollow yourself
+        if (followerId == followedId) {
+            System.out.println("❌ You cannot unfollow yourself");
+            return false;
+        }
+
+        // 🚫 Not following
+        if (!followDAO.isFollowing(followerId, followedId)) {
+            System.out.println("⚠ You are not following this user");
+            return false;
+        }
+
+        boolean success = followDAO.unfollowUser(followerId, followedId);
+
+        if (success) {
+            System.out.println("🚫 Unfollowed successfully");
+        } else {
+            System.out.println("❌ Failed to unfollow user");
         }
 
         return success;
     }
 
-    // ================= UNFOLLOW USER =================
-    public boolean unfollowUser(int followerId, int followedId) {
-        return followDAO.unfollowUser(followerId, followedId);
-    }
 
     // ================= VIEW FOLLOWERS =================
     public List<User> viewFollowers(int userId) {
