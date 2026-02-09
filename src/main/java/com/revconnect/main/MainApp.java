@@ -550,12 +550,27 @@ public class MainApp {
                     System.out.print("New Website: ");
                     p.setWebsite(sc.nextLine());
 
+                    // ✅ CREATOR + BUSINESS
+                    if (loggedInUser.getUserType() == UserType.CREATOR ||
+                            loggedInUser.getUserType() == UserType.BUSINESS) {
+
+                        System.out.print("New Category / Industry: ");
+                        p.setCategory(sc.nextLine());
+                    }
+
+                    // ✅ BUSINESS ONLY
+                    if (loggedInUser.getUserType() == UserType.BUSINESS) {
+                        System.out.print("New Contact Info: ");
+                        p.setContactInfo(sc.nextLine());
+                    }
+
                     System.out.println(
                             profileService.updateProfile(p)
                                     ? "✅ Profile updated"
                                     : "❌ Failed"
                     );
                 }
+
 
                 case 4 -> {   // 🔐 Change Password
                     System.out.print("Enter current password: ");
@@ -629,7 +644,7 @@ public class MainApp {
                         System.out.println("📭 Business hours not set");
                     } else {
                         System.out.println("\n🕒 BUSINESS HOURS");
-                        System.out.println(hours);
+                        System.out.println(hours.trim());
                     }
                 }
 
@@ -639,23 +654,31 @@ public class MainApp {
                         break;
                     }
 
-                    System.out.println("Enter business hours (example format):");
-                    System.out.println("MON-FRI: 09:00 - 18:00");
+                    System.out.println("Enter business hours (type END to finish):");
+                    System.out.println("Example:");
+
+                    System.out.println("( MON-FRI: 09:00 - 18:00");
                     System.out.println("SAT: 10:00 - 14:00");
                     System.out.println("SUN: Closed");
-                    System.out.print("Business Hours: ");
+                    System.out.println("END ) ");
 
-                    String hours = sc.nextLine();
+                    StringBuilder hoursBuilder = new StringBuilder();
+                    String line;
+
+                    while (!(line = sc.nextLine()).equalsIgnoreCase("END")) {
+                        hoursBuilder.append(line.trim()).append("\n");
+                    }
 
                     boolean updated = profileService.updateBusinessHours(
                             loggedInUser.getUserId(),
-                            hours
+                            hoursBuilder.toString()
                     );
 
                     System.out.println(updated
                             ? "✅ Business hours updated successfully"
                             : "❌ Failed to update business hours");
                 }
+
 
                 case 9 -> {
                     if (loggedInUser.getUserType() != UserType.BUSINESS &&

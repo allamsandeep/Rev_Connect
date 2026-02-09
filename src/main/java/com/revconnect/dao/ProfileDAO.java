@@ -188,7 +188,11 @@ public class ProfileDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("business_hours");
+                Clob clob = rs.getClob("business_hours");
+
+                if (clob != null) {
+                    return clob.getSubString(1, (int) clob.length());
+                }
             }
 
         } catch (Exception e) {
@@ -196,6 +200,7 @@ public class ProfileDAO {
         }
         return null;
     }
+
     public boolean updateExternalLinks(int profileId, String links) {
 
         String sql =
