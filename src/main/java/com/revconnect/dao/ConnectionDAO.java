@@ -2,11 +2,14 @@ package com.revconnect.dao;
 
 import com.revconnect.util.DBConnection;
 
+import com.revconnect.model.UserConnection;
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ConnectionDAO {
 
@@ -268,6 +271,32 @@ public class ConnectionDAO {
             e.printStackTrace();
         }
     }
+    public UserConnection getConnectionById(int connectionId) {
+
+        String sql = "SELECT * FROM connections WHERE connection_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, connectionId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                UserConnection uc = new UserConnection();
+                uc.setConnectionId(rs.getInt("connection_id"));
+                uc.setSenderId(rs.getInt("sender_id"));
+                uc.setReceiverId(rs.getInt("receiver_id"));
+                uc.setStatus(rs.getString("status"));
+                return uc;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
 }

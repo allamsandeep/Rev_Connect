@@ -5,6 +5,7 @@ import com.revconnect.model.Post;
 import com.revconnect.dao.NotificationDAO;
 import com.revconnect.dao.UserDAO;
 import com.revconnect.model.PostAnalytics;
+import com.revconnect.model.UserType;   // ✅ ADD THIS
 
 
 
@@ -17,23 +18,69 @@ public class PostService {
     private HashtagService hashtagService = new HashtagService();
     private LikeService likeService = new LikeService();
     private NotificationDAO notificationDAO = new NotificationDAO();
+    // ================= CREATE POST (SAFE + HASHTAGS) =================
+    public boolean createPost(Post post, UserType userType) {
 
-    // ================= CREATE POST (WITH HASHTAGS) =================
-    public boolean createPost(Post post) {
+        // 1️⃣ EMPTY CONTENT CHECK
+        if (post.getContent() == null || post.getContent().trim().isEmpty()) {
+            System.out.println("❌ Post content cannot be empty");
+            return false;
+        }
 
-        // 1️⃣ Save post
+        // 2️⃣ DEFAULT POST TYPE
+        if (post.getPostType() == null) {
+            post.setPostType("NORMAL");
+        }
+
+        String postType = post.getPostType().toUpperCase();
+
+        // 3️⃣ INVALID POST TYPE CHECK
+        if (!postType.equals("NORMAL") && !postType.equals("PROMOTIONAL")) {
+            System.out.println("❌ Invalid post type");
+            return false;
+        }
+
+        post.setPostType(postType);
+
+        // 4️⃣ PROMOTIONAL POST RULES
+        if (postType.equals("PROMOTIONAL")) {
+
+            if (userType == UserType.PERSONAL) {
+                System.out.println("❌ Personal users cannot create promotional posts");
+                return false;
+            }
+
+            if (post.getCtaText() == null || post.getCtaText().isBlank()
+                    || post.getCtaLink() == null || post.getCtaLink().isBlank()) {
+
+                System.out.println("❌ Promotional posts must include CTA text and link");
+                return false;
+            }
+        }
+
+        // 5️⃣ REMOVE CTA FROM NORMAL POSTS
+        if (postType.equals("NORMAL")) {
+            post.setCtaText(null);
+            post.setCtaLink(null);
+        }
+
+        // 6️⃣ DEFAULT PIN
+        post.setPinned(false);
+
+        // ================= SAVE POST =================
         boolean created = postDAO.create(post);
         if (!created) return false;
 
-        // 2️⃣ Get latest post id for this user
+        // ================= GET POST ID =================
         int postId = postDAO.findLatestPostIdByUser(post.getUserId());
         if (postId == -1) return false;
 
-        // 3️⃣ Save hashtags
+        // ================= SAVE HASHTAGS =================
         hashtagService.saveHashtags(postId, post.getContent());
 
         return true;
     }
+
 
     // ================= VIEW GLOBAL FEED =================
     public List<Post> viewAllPosts() {

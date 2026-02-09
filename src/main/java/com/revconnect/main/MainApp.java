@@ -758,47 +758,76 @@ public class MainApp {
             int choice = readInt();
 
             switch (choice) {
-
 // ================= CREATE POST =================
                 case 1 -> {
                     Post post = new Post();
                     post.setUserId(loggedInUser.getUserId());
 
                     System.out.print("Post Content: ");
-                    post.setContent(sc.nextLine());
+                    String content = sc.nextLine().trim();
+
+                    // ❌ BLOCK EMPTY POSTS
+                    if (content.isEmpty()) {
+                        System.out.println("❌ Post content cannot be empty");
+                        break;
+                    }
+
+                    post.setContent(content);
 
                     // 🔥 BUSINESS / CREATOR FEATURE
                     if (loggedInUser.getUserType() == UserType.BUSINESS ||
                             loggedInUser.getUserType() == UserType.CREATOR) {
 
                         System.out.print("Post Type (NORMAL / PROMOTIONAL): ");
-                        post.setPostType(sc.nextLine().toUpperCase());
+                        String postType = sc.nextLine().trim().toUpperCase();
 
-                        // 🔘 CTA BUTTON (OPTIONAL)
-                        System.out.print("Add CTA? (yes/no): ");
-                        String addCta = sc.nextLine().trim().toLowerCase();
-
-                        if (addCta.equals("yes")) {
-                            System.out.print("CTA Text (e.g., Shop Now): ");
-                            post.setCtaText(sc.nextLine());
-
-                            System.out.print("CTA Link (URL): ");
-                            post.setCtaLink(sc.nextLine());
+                        // ✅ SAFETY CHECK
+                        if (!postType.equals("NORMAL") && !postType.equals("PROMOTIONAL")) {
+                            System.out.println("❌ Invalid post type. Defaulting to NORMAL");
+                            postType = "NORMAL";
                         }
+
+                        post.setPostType(postType);
+
+                        // 🔘 CTA BUTTON (ONLY FOR PROMOTIONAL)
+                        if (postType.equals("PROMOTIONAL")) {
+                            System.out.print("Add CTA? (yes/no): ");
+                            String addCta = sc.nextLine().trim().toLowerCase();
+
+                            if (addCta.equals("yes")) {
+
+                                System.out.print("CTA Text (e.g., Shop Now): ");
+                                String ctaText = sc.nextLine().trim();
+
+                                System.out.print("CTA Link (URL): ");
+                                String ctaLink = sc.nextLine().trim();
+
+                                // ❌ VALIDATE CTA
+                                if (ctaText.isEmpty() || ctaLink.isEmpty()) {
+                                    System.out.println("❌ CTA text and link cannot be empty");
+                                    break;
+                                }
+
+                                post.setCtaText(ctaText);
+                                post.setCtaLink(ctaLink);
+                            }
+                        }
+
                     } else {
+                        // 👤 PERSONAL USER
                         post.setPostType("NORMAL");
                     }
 
-                    // ✅ IMPORTANT: DEFAULT PINNED VALUE
+                    // ✅ DEFAULT PINNED VALUE
                     post.setPinned(false);
 
                     System.out.println(
-                            postService.createPost(post)
+                            postService.createPost(post, loggedInUser.getUserType())
                                     ? "✅ Post created"
                                     : "❌ Post failed"
                     );
-                }
 
+                }
 
                 // ================= GLOBAL FEED =================
                 case 2 -> {
@@ -1135,7 +1164,7 @@ public class MainApp {
                     }
                 }
 
-// ================= PIN POST =================
+             // ================= PIN POST =================
                 case 16 -> {
                     if (loggedInUser.getUserType() == UserType.BUSINESS ||
                             loggedInUser.getUserType() == UserType.CREATOR) {

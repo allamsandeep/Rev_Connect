@@ -2,7 +2,8 @@ package com.revconnect.service;
 
 import com.revconnect.dao.ConnectionDAO;
 import com.revconnect.dao.UserDAO;
-import java.sql.SQLIntegrityConstraintViolationException;
+import com.revconnect.model.UserConnection;
+
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class ConnectionService {
 
     private ConnectionDAO connectionDAO = new ConnectionDAO();
     private final UserDAO userDAO = new UserDAO();   // ✅ ADD THIS
+    private final NotificationService notificationService = new NotificationService();
 
     // ================= SEND CONNECTION REQUEST =================
     public boolean sendConnectionRequest(int senderId, int receiverId) {
@@ -40,20 +42,81 @@ public class ConnectionService {
 
         if (sent) {
             System.out.println("📨 Connection request sent");
+
+            // 🔔 ✅ NEW: CONNECTION REQUEST NOTIFICATION
+            String senderName = userDAO.getUsernameById(senderId);
+
+            notificationService.createNotification(
+                    receiverId,
+                    "🤝 " + senderName + " sent you a connection request"
+            );
         }
 
         return sent;
     }
 
 
+
     // ================= ACCEPT REQUEST =================
     public boolean acceptRequest(int connectionId) {
-        return connectionDAO.updateRequestStatus(connectionId, "ACCEPTED");
+
+        UserConnection connection =
+                connectionDAO.getConnectionById(connectionId);
+
+        if (connection == null) {
+            System.out.println("❌ Connection not found");
+            return false;
+        }
+
+        boolean accepted =
+                connectionDAO.updateRequestStatus(connectionId, "ACCEPTED");
+
+        if (accepted) {
+            int senderId = connection.getSenderId();
+            int receiverId = connection.getReceiverId();
+
+            String receiverName =
+                    userDAO.getUsernameById(receiverId);
+
+            notificationService.createNotification(
+                    senderId,
+                    "✅ " + receiverName + " accepted your connection request"
+            );
+        }
+
+        return accepted;
     }
+
+
 
     // ================= REJECT REQUEST =================
     public boolean rejectRequest(int connectionId) {
-        return connectionDAO.updateRequestStatus(connectionId, "REJECTED");
+
+        UserConnection connection =
+                connectionDAO.getConnectionById(connectionId);
+
+        if (connection == null) {
+            System.out.println("❌ Connection not found");
+            return false;
+        }
+
+        boolean rejected =
+                connectionDAO.updateRequestStatus(connectionId, "REJECTED");
+
+        if (rejected) {
+            int senderId = connection.getSenderId();
+            int receiverId = connection.getReceiverId();
+
+            String receiverName =
+                    userDAO.getUsernameById(receiverId);
+
+            notificationService.createNotification(
+                    senderId,
+                    "❌ " + receiverName + " rejected your connection request"
+            );
+        }
+
+        return rejected;
     }
 
     // ================= VIEW PENDING REQUESTS =================
